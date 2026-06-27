@@ -1,0 +1,36 @@
+name: Three-Tier App CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Install Docker Compose
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker-compose
+
+    - name: Build Docker Images
+      run: |
+        docker compose build
+
+    - name: Run Containers
+      run: |
+        docker compose up -d
+
+    - name: Check Running Containers
+      run: |
+        docker compose ps
+
+    - name: Stop Containers
+      run: |
+        docker compose down
